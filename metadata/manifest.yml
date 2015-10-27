@@ -1,12 +1,12 @@
 ---
 Name: apache
 Cartridge-Short-Name: PYTHON_NODEJS
-Display-Name: Python multiversion
+Display-Name: Python multiversion with Node.js
 Description: 'Python is a general-purpose, high-level programming language whose design
   philosophy emphasizes code readability. Popular development frameworks include:
   Django, Bottle, Pylons, Zope and TurboGears.'
 Version: '2.2'
-Source-Url: https://github.com/jelastic-public-cartridges/openshift-jelastic-python-wsgi.git
+Source-Url: https://github.com/AkelMaister/openshift-jelastic-python-wsgi.git
 License: The Python License, version 2.7-3.4
 License-Url: http://docs.python.org/3/license.html
 Vendor: python.org
