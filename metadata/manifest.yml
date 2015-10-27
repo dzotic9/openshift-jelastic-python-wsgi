@@ -1,6 +1,6 @@
 ---
 Name: apache
-Cartridge-Short-Name: PYTHON
+Cartridge-Short-Name: PYTHON_NODEJS
 Display-Name: Python multiversion
 Description: 'Python is a general-purpose, high-level programming language whose design
   philosophy emphasizes code readability. Popular development frameworks include:
