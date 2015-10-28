@@ -1,5 +1,5 @@
 ---
-Name: apache2
+Name: python-nodejs
 Cartridge-Short-Name: PYTHONNODEJS
 Display-Name: PythonNodeJS
 Description: 'Python is a general-purpose, high-level programming language whose design  philosophy emphasizes code readability. Popular development frameworks include: Django, Bottle, Pylons, Zope and TurboGears.'
