@@ -1,16 +1,16 @@
-ServerRoot "<%= ENV['OPENSHIFT_PYTHON_DIR'] %>"
-DocumentRoot "<%= ENV['OPENSHIFT_PYTHON_DOCUMENT_ROOT'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi" %>"
-Listen <%= ENV['OPENSHIFT_PYTHON_IP'] %>:<%= ENV['OPENSHIFT_PYTHON_PORT'] %>
+ServerRoot "<%= ENV['OPENSHIFT_PYTHONNODEJS_DIR'] %>"
+DocumentRoot "<%= ENV['OPENSHIFT_PYTHONNODEJS_DOCUMENT_ROOT'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi" %>"
+Listen <%= ENV['OPENSHIFT_PYTHONNODEJS_IP'] %>:<%= ENV['OPENSHIFT_PYTHONNODEJS_PORT'] %>
 User <%= ENV['OPENSHIFT_GEAR_UUID'] %>
 Group <%= ENV['OPENSHIFT_GEAR_UUID'] %>
 <IfVersion >= 2.4>
-DefaultRuntimeDir "<%= "#{ENV['OPENSHIFT_PYTHON_DIR']}/run"%>"
+DefaultRuntimeDir "<%= "#{ENV['OPENSHIFT_PYTHONNODEJS_DIR']}/run"%>"
 </IfVersion>
 
-ErrorLog "|/usr/sbin/rotatelogs <%= ENV['OPENSHIFT_PYTHON_LOG_DIR'] %>/error_log 86400"
-CustomLog "|/usr/sbin/rotatelogs <%= ENV['OPENSHIFT_PYTHON_LOG_DIR'] %>/access_log 86400" combined
+ErrorLog "|/usr/sbin/rotatelogs <%= ENV['OPENSHIFT_PYTHONNODEJS_LOG_DIR'] %>/error_log 86400"
+CustomLog "|/usr/sbin/rotatelogs <%= ENV['OPENSHIFT_PYTHONNODEJS_LOG_DIR'] %>/access_log 86400" combined
 
-<Directory "<%= ENV['OPENSHIFT_PYTHON_DOCUMENT_ROOT'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi" %>">
+<Directory "<%= ENV['OPENSHIFT_PYTHONNODEJS_DOCUMENT_ROOT'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi" %>">
   AllowOverride all
   Options -MultiViews
 </Directory>
@@ -21,7 +21,7 @@ CustomLog "|/usr/sbin/rotatelogs <%= ENV['OPENSHIFT_PYTHON_LOG_DIR'] %>/access_l
   end
 %>
 
-WSGIScriptAlias / "<%= ENV['OPENSHIFT_PYTHON_WSGI_APPLICATION'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi/application" %>"
+WSGIScriptAlias / "<%= ENV['OPENSHIFT_PYTHONNODEJS_WSGI_APPLICATION'] || "#{ENV['OPENSHIFT_REPO_DIR']}wsgi/application" %>"
 WSGISocketPrefix "/tmp/wsgi"
 WSGIPassAuthorization On
 WSGIProcessGroup <%= ENV['OPENSHIFT_GEAR_UUID'] %>

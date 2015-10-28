@@ -1,14 +1,14 @@
 #!/bin/bash
 
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
-source "${OPENSHIFT_PYTHON_DIR}usr/versions/${OPENSHIFT_PYTHON_VERSION}/lib/create-virtenv"
-source "${OPENSHIFT_PYTHON_DIR}usr/versions/${OPENSHIFT_PYTHON_VERSION}/lib/python_config"
+source "${OPENSHIFT_PYTHONNODEJS_DIR}usr/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/lib/create-virtenv"
+source "${OPENSHIFT_PYTHONNODEJS_DIR}usr/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/lib/python_config"
 
-HTTPD_CFG_FILE=${OPENSHIFT_PYTHON_DIR}etc/conf/httpd_nolog.conf
-HTTPD_CFG_DIR=${OPENSHIFT_PYTHON_DIR}etc/conf.d/
-ERB_HTTPD_CFG_DIR=${OPENSHIFT_PYTHON_DIR}usr/versions/${OPENSHIFT_PYTHON_VERSION}/etc/conf.d/
+HTTPD_CFG_FILE=${OPENSHIFT_PYTHONNODEJS_DIR}etc/conf/httpd_nolog.conf
+HTTPD_CFG_DIR=${OPENSHIFT_PYTHONNODEJS_DIR}etc/conf.d/
+ERB_HTTPD_CFG_DIR=${OPENSHIFT_PYTHONNODEJS_DIR}usr/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/conf.d/
 HTTPD_PASSENV_FILE=${HTTPD_CFG_DIR}passenv.conf
-HTTPD_PID_FILE=${OPENSHIFT_PYTHON_DIR}run/httpd.pid
+HTTPD_PID_FILE=${OPENSHIFT_PYTHONNODEJS_DIR}run/httpd.pid
 
 # construct the configuration directives for httpd
 HTTPD_CMD_CONF="-C 'Include ${HTTPD_CFG_DIR}*.conf' -f $HTTPD_CFG_FILE"
@@ -17,13 +17,13 @@ for dir in /etc/openshift/cart.conf.d/httpd{,/python} ; do
 done
 
 # For backwards compatibility
-export APPDIR=$OPENSHIFT_PYTHON_DIR
+export APPDIR=$OPENSHIFT_PYTHONNODEJS_DIR
 
 function start_app() {
-    echo "Starting Python ${OPENSHIFT_PYTHON_VERSION} cartridge (app.py server)"
+    echo "Starting Python ${OPENSHIFT_PYTHONNODEJS_VERSION} cartridge (app.py server)"
     cd $OPENSHIFT_REPO_DIR \
-      && nohup python -u app.py > "${OPENSHIFT_PYTHON_DIR}logs/appserver.log" 2>&1 &
-    echo $! > ${OPENSHIFT_PYTHON_DIR}run/appserver.pid
+      && nohup python -u app.py > "${OPENSHIFT_PYTHONNODEJS_DIR}logs/appserver.log" 2>&1 &
+    echo $! > ${OPENSHIFT_PYTHONNODEJS_DIR}run/appserver.pid
 }
 
 function pre_start_apache_config {
@@ -31,11 +31,11 @@ function pre_start_apache_config {
     select_python_document_root ${OPENSHIFT_REPO_DIR}
     select_python_wsgi_application ${OPENSHIFT_REPO_DIR}
     oo-erb ${ERB_HTTPD_CFG_DIR}openshift.conf.erb > ${HTTPD_CFG_DIR}openshift.conf
-    oo-erb ${OPENSHIFT_PYTHON_DIR}conf/performance.conf.erb.hidden > ${HTTPD_CFG_DIR}performance.conf
+    oo-erb ${OPENSHIFT_PYTHONNODEJS_DIR}conf/performance.conf.erb.hidden > ${HTTPD_CFG_DIR}performance.conf
 }
 
 function start_apache() {
-    echo "Starting Python ${OPENSHIFT_PYTHON_VERSION} cartridge (Apache+mod_wsgi)"
+    echo "Starting Python ${OPENSHIFT_PYTHONNODEJS_VERSION} cartridge (Apache+mod_wsgi)"
     pre_start_apache_config
     ensure_valid_httpd_process "$HTTPD_PID_FILE" "$HTTPD_CFG_FILE"
     eval "/usr/sbin/httpd $HTTPD_CMD_CONF -k start" \
@@ -51,8 +51,8 @@ function start() {
 }
 
 function stop_app() {
-    if [ -s ${OPENSHIFT_PYTHON_DIR}run/appserver.pid ]; then
-        kpid=$(cat ${OPENSHIFT_PYTHON_DIR}run/appserver.pid)
+    if [ -s ${OPENSHIFT_PYTHONNODEJS_DIR}run/appserver.pid ]; then
+        kpid=$(cat ${OPENSHIFT_PYTHONNODEJS_DIR}run/appserver.pid)
         iters=0
         while kill $kpid >/dev/null 2>&1; do
             iters=$(($iters + 1))
@@ -60,7 +60,7 @@ function stop_app() {
             sleep 1
         done
         kill -KILL $kpid >/dev/null 2>&1 || :
-        rm -f ${OPENSHIFT_PYTHON_DIR}run/appserver.pid
+        rm -f ${OPENSHIFT_PYTHONNODEJS_DIR}run/appserver.pid
     fi
 }
 
@@ -74,7 +74,7 @@ function stop_apache() {
 }
 
 function stop() {
-    echo "Stopping Python ${OPENSHIFT_PYTHON_VERSION} cartridge"
+    echo "Stopping Python ${OPENSHIFT_PYTHONNODEJS_VERSION} cartridge"
 
     # Do both in case the last commit transitioned from one to the
     # other or there was a problem.
@@ -84,7 +84,7 @@ function stop() {
 
 
 function restart() {
-    echo "Restarting Python ${OPENSHIFT_PYTHON_VERSION} cartridge"
+    echo "Restarting Python ${OPENSHIFT_PYTHONNODEJS_VERSION} cartridge"
     if [ -f "${OPENSHIFT_REPO_DIR}app.py" ]; then
         stop_apache
         stop_app
@@ -100,9 +100,9 @@ function restart() {
 function status() {
     res=0
     if [ -f "${OPENSHIFT_REPO_DIR}app.py" ]; then
-        output=$(curl -s -m 30 http://$OPENSHIFT_PYTHON_IP:$OPENSHIFT_PYTHON_PORT/ &> /dev/null) || res=1
+        output=$(curl -s -m 30 http://$OPENSHIFT_PYTHONNODEJS_IP:$OPENSHIFT_PYTHONNODEJS_PORT/ &> /dev/null) || res=1
     else
-        output=$(curl -s -m 30 http://$OPENSHIFT_PYTHON_IP:$OPENSHIFT_PYTHON_PORT/server-status?auto 2>&1 ) || res=1
+        output=$(curl -s -m 30 http://$OPENSHIFT_PYTHONNODEJS_IP:$OPENSHIFT_PYTHONNODEJS_PORT/server-status?auto 2>&1 ) || res=1
     fi
     if [ $res -eq 0 ]; then
         client_result "Application is running"
@@ -113,9 +113,9 @@ function status() {
 
 # Clean up any log files
 function tidy() {
-    client_message "Emptying log dir: $OPENSHIFT_PYTHON_LOG_DIR"
+    client_message "Emptying log dir: $OPENSHIFT_PYTHONNODEJS_LOG_DIR"
     shopt -s dotglob
-    rm -rf $OPENSHIFT_PYTHON_LOG_DIR/*
+    rm -rf $OPENSHIFT_PYTHONNODEJS_LOG_DIR/*
 }
 
 function build() {
@@ -123,7 +123,7 @@ function build() {
         m=$OPENSHIFT_PYPI_MIRROR_URL
         if curl -m 15 -f -s "$m" &>/dev/null
         then
-            OPENSHIFT_PYTHON_MIRROR="-i $m"
+            OPENSHIFT_PYTHONNODEJS_MIRROR="-i $m"
         fi
     fi
 
@@ -140,15 +140,15 @@ function build() {
     echo "Activating virtenv"
     activate-virtenv
 
-    local requirements_file=${OPENSHIFT_PYTHON_REQUIREMENTS_PATH:-requirements.txt}
+    local requirements_file=${OPENSHIFT_PYTHONNODEJS_REQUIREMENTS_PATH:-requirements.txt}
     if [ -f ${OPENSHIFT_REPO_DIR}${requirements_file} ]; then
         echo "Checking for pip dependency listed in ${requirements_file} file.."
-        ( cd $OPENSHIFT_REPO_DIR; pip install -r ${OPENSHIFT_REPO_DIR}${requirements_file} $OPENSHIFT_PYTHON_MIRROR )
+        ( cd $OPENSHIFT_REPO_DIR; pip install -r ${OPENSHIFT_REPO_DIR}${requirements_file} $OPENSHIFT_PYTHONNODEJS_MIRROR )
     fi
 
     if [ -f ${OPENSHIFT_REPO_DIR}/setup.py ]; then
         echo "Running setup.py script.."
-        ( cd $OPENSHIFT_REPO_DIR; python ${OPENSHIFT_REPO_DIR}/setup.py develop $OPENSHIFT_PYTHON_MIRROR )
+        ( cd $OPENSHIFT_REPO_DIR; python ${OPENSHIFT_REPO_DIR}/setup.py develop $OPENSHIFT_PYTHONNODEJS_MIRROR )
     fi
 
     relative-virtenv

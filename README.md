@@ -1,3 +1,4 @@
+TEST
 # Jelastic Python WSGI Cartridge
 This cartridge provides [Python WSGI](https://www.python.org/) on Jelastic Platform.
 

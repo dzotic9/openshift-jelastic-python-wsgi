@@ -7,12 +7,12 @@ case "$1" in
       version="$2"
 esac
 
-echo "$version" > ${OPENSHIFT_PYTHON_DIR}env/OPENSHIFT_PYTHON_VERSION
+echo "$version" > ${OPENSHIFT_PYTHONNODEJS_DIR}env/OPENSHIFT_PYTHONNODEJS_VERSION
 
-mkdir -p ${OPENSHIFT_PYTHON_DIR}template
+mkdir -p ${OPENSHIFT_PYTHONNODEJS_DIR}template
 
 # Call the version specific install script
-#exec ${OPENSHIFT_PYTHON_DIR}usr/versions/${version}/bin/install $version
+#exec ${OPENSHIFT_PYTHONNODEJS_DIR}usr/versions/${version}/bin/install $version
 
 if [[ -d /usr/lib64 ]]; then
   _libdir=/usr/lib64
@@ -22,18 +22,18 @@ fi
 
 # Copy the version specific files to python directory
 shopt -s dotglob
-[ -d ${OPENSHIFT_PYTHON_DIR}/versions/${OPENSHIFT_PYTHON_VERSION}/template ] \
-  && cp -r ${OPENSHIFT_PYTHON_DIR}/versions/${OPENSHIFT_PYTHON_VERSION}/template/* ${OPENSHIFT_PYTHON_DIR}template
+[ -d ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/template ] \
+  && cp -r ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/template/* ${OPENSHIFT_PYTHONNODEJS_DIR}template
 
 # Create additional directories required by PYTHON and httpd
-ln -sf ${_libdir}/httpd/modules $OPENSHIFT_PYTHON_DIR
-ln -sf /etc/httpd/conf/magic ${OPENSHIFT_PYTHON_DIR}/versions/${OPENSHIFT_PYTHON_VERSION}/etc/magic
+ln -sf ${_libdir}/httpd/modules $OPENSHIFT_PYTHONNODEJS_DIR
+ln -sf /etc/httpd/conf/magic ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/magic
 
 # The virtual environment is assumed to exist going forward
-if [ ! -f ${OPENSHIFT_PYTHON_DIR}virtenv/bin/python ]; then
-    source ${OPENSHIFT_PYTHON_DIR}/versions/${OPENSHIFT_PYTHON_VERSION}/lib/python-context
+if [ ! -f ${OPENSHIFT_PYTHONNODEJS_DIR}virtenv/bin/python ]; then
+    source ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/lib/python-context
     python-context-stdin <<EOF
-source ${OPENSHIFT_PYTHON_DIR}/versions/${OPENSHIFT_PYTHON_VERSION}/lib/create-virtenv
+source ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/lib/create-virtenv
 create-virtenv
 EOF
 fi

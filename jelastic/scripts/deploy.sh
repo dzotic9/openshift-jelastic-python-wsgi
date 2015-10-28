@@ -147,8 +147,34 @@ function _deploy(){
     then
         _setContext $context;
     fi
+    _nodejsaddrepo;
+    _installnodejs;
     _finishDeploy;
 }
+
+function _installnodejs(){
+    yum install -y nodejs ;
+}
+
+
+function _nodejsaddrepo(){
+    echo "[nodesource]
+name=Node.js Packages for Enterprise Linux 6 - $basearch
+baseurl=https://rpm.nodesource.com/pub/el/6/$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+
+[nodesource-source]
+name=Node.js for Enterprise Linux 6 - $basearch - Source
+baseurl=https://rpm.nodesource.com/pub/el/6/SRPMS
+failovermethod=priority
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+gpgcheck=1" > /etc/yum.repos.d/nodesource-el.repo ;
+}
+
 
 function _finishDeploy(){
     _updateOwnership $APPWEBROOT;
