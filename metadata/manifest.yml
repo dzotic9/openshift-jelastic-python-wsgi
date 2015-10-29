@@ -1,7 +1,7 @@
 ---
-Name: python-nodejs
+Name: python-nodejs2
 Cartridge-Short-Name: PYTHONNODEJS
-Display-Name: PythonNodeJS
+Display-Name: PythonNodeJS2
 Description: 'Python is a general-purpose, high-level programming language whose design  philosophy emphasizes code readability. Popular development frameworks include: Django, Bottle, Pylons, Zope and TurboGears.'
 Version: '2.2'
 Source-Url: https://github.com/AkelMaister/openshift-jelastic-python-wsgi.git
