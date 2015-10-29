@@ -24,9 +24,6 @@ mkdir -p ${OPENSHIFT_PYTHONNODEJS_DIR}etc
 cp -f $OPENSHIFT_PYTHONNODEJS_DIR/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/conf.d/performance.conf.erb $OPENSHIFT_PYTHONNODEJS_DIR/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/conf/performance.conf.erb
 cp -f $OPENSHIFT_PYTHONNODEJS_DIR/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/conf/performance.conf.erb $OPENSHIFT_PYTHONNODEJS_DIR/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/conf/performance.conf.erb.hidden
 
-
-
-
 # Update environment
 #source ${OPENSHIFT_PYTHONNODEJS_DIR}usr/versions/${version}/lib/update-configuration
 #update-configuration

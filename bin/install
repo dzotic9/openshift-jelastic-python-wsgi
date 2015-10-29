@@ -29,6 +29,8 @@ shopt -s dotglob
 ln -sf ${_libdir}/httpd/modules $OPENSHIFT_PYTHONNODEJS_DIR
 ln -sf /etc/httpd/conf/magic ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/magic
 
+ln -sf /etc/yum.repos.d/nodesource-el.repo_1 ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/template/nodesource-el.repo
+
 # Adding Node.JS official repository
 echo '[nodesource]
 name=Node.js Packages for Enterprise Linux 6 - $basearch
