@@ -3,6 +3,8 @@ locked_files:
 - bin/
 - bin/*
 - etc/
+- etc/yum.repos.d/
+- etc/yum.repos.d/*
 - etc/conf/
 - etc/conf/*
 - etc/conf.d/
