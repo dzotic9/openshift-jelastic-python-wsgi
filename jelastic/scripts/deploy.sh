@@ -16,17 +16,17 @@ function _setContext(){
 function _unpack(){
     package_name=`ls $DOWNLOADS`;
     APPWEBROOT=$1;
-    [ ! -s "$DOWNLOADS/$package_name" ] && { 
+    [ ! -s "$DOWNLOADS/$package_name" ] && {
         _clearCache;
         [ `basename ${APPWEBROOT}` != "ROOT" ] && { rmdir ${APPWEBROOT}; }
         writeJSONResponceErr "result=>4078" "message=>Error loading file from URL";
         die -q;
     }
 
-    shopt -s dotglob; 
+    shopt -s dotglob;
     rm -Rf ${APPWEBROOT}*;
-    shopt -u dotglob; 
-    
+    shopt -u dotglob;
+
     ensureFileCanBeUncompressed "$DOWNLOADS/${package_name}";
     [[ ! -d "$APPWEBROOT" ]] && { mkdir -p $APPWEBROOT;}
     if [[ ${package_url} =~ .zip$ ]] || [[ ${package_name} =~ .zip$ ]]
@@ -86,12 +86,12 @@ function _shiftContentFromSubdirectory(){
             mv "$appwebroot/$object/"* "$appwebroot/" 2>/dev/null ;
             [ -d "$appwebroot/$object" ] && rm -rf "$appwebroot/$object";
         else
-            rmdir "$appwebroot/$object" && [ `basename $appwebroot` != "ROOT" ] && { 
+            rmdir "$appwebroot/$object" && [ `basename $appwebroot` != "ROOT" ] && {
                      [ -d "$appwebroot" ] &&  rm -rf "$appwebroot";
-            } ;  writeJSONResponceErr "result=>4072" "message=>Empty package!"; die -q; 
+            } ;  writeJSONResponceErr "result=>4072" "message=>Empty package!"; die -q;
         fi
     fi
-    shopt -u dotglob;   
+    shopt -u dotglob;
 }
 
 
@@ -148,7 +148,7 @@ function _deploy(){
         _setContext $context;
     fi
     _nodejsaddrepo;
-    _installnodejs;
+    # _installnodejs;
     _finishDeploy;
 }
 
@@ -158,7 +158,7 @@ function _installnodejs(){
 
 
 function _nodejsaddrepo(){
-    echo "[nodesource]
+    echo '[nodesource]
 name=Node.js Packages for Enterprise Linux 6 - $basearch
 baseurl=https://rpm.nodesource.com/pub/el/6/$basearch
 failovermethod=priority
@@ -172,7 +172,7 @@ baseurl=https://rpm.nodesource.com/pub/el/6/SRPMS
 failovermethod=priority
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
-gpgcheck=1" > /etc/yum.repos.d/nodesource-el.repo ;
+gpgcheck=1' > /etc/yum.repos.d/nodesource-el.repo ;
 }
 
 
