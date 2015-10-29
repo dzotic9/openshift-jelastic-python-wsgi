@@ -29,6 +29,23 @@ shopt -s dotglob
 ln -sf ${_libdir}/httpd/modules $OPENSHIFT_PYTHONNODEJS_DIR
 ln -sf /etc/httpd/conf/magic ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/etc/magic
 
+# Adding Node.JS official repository
+echo '[nodesource]
+name=Node.js Packages for Enterprise Linux 6 - $basearch
+baseurl=https://rpm.nodesource.com/pub/el/6/$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+
+[nodesource-source]
+name=Node.js for Enterprise Linux 6 - $basearch - Source
+baseurl=https://rpm.nodesource.com/pub/el/6/SRPMS
+failovermethod=priority
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL
+gpgcheck=1' > /etc/yum.repos.d/nodesource-el.repo
+
 # The virtual environment is assumed to exist going forward
 if [ ! -f ${OPENSHIFT_PYTHONNODEJS_DIR}virtenv/bin/python ]; then
     source ${OPENSHIFT_PYTHONNODEJS_DIR}/versions/${OPENSHIFT_PYTHONNODEJS_VERSION}/lib/python-context
